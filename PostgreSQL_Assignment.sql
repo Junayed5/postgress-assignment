@@ -80,3 +80,16 @@ SELECT common_name, MAX(sighting_time), "name" FROM species NATURAL JOIN sightin
 
 -- Problem 7
 
+
+-- problem 8
+
+SELECT sighting_id, sighting_time::time FROM sightings;
+-- SELECT (
+--     CASE 
+--         WHEN convert(sighting_time) >= '06:00:00' AND convert(sighting_time) < '12:00:00' THEN 'Morning'
+--         WHEN convert(sighting_time) >= '12:00:00' AND convert(sighting_time) < '18:00:00' THEN 'Afternoon'
+--         WHEN convert(sighting_time) >= '18:00:00' AND convert(sighting_time) < '24:00:00' THEN 'Evening'
+--         WHEN convert(sighting_time) >= '00:00:00' AND convert(sighting_time) < '06:00:00' THEN 'Night'
+--         ELSE 'Unknown'
+--     END
+-- ) FROM sightings;
