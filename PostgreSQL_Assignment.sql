@@ -74,4 +74,9 @@ SELECT name, count(*) AS total_sightings FROM rangers NATURAL JOIN sightings GRO
 
 SELECT common_name FROM species LEFT JOIN sightings ON species.species_id = sightings.species_id WHERE sightings.species_id IS NULL;
 
+-- Problem 6
+
+SELECT common_name, MAX(sighting_time), "name" FROM species NATURAL JOIN sightings NATURAL JOIN rangers GROUP BY common_name,"name" ORDER BY MAX(sighting_time) DESC LIMIT 2;
+
+-- Problem 7
 
