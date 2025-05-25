@@ -80,6 +80,8 @@ SELECT common_name, MAX(sighting_time), "name" FROM species NATURAL JOIN sightin
 
 -- Problem 7
 
+ALTER TABLE species ADD COLUMN status VARCHAR(50);
+UPDATE species SET status = 'Historic' WHERE discovery_date < '1800-01-01';
 
 -- problem 8
 
