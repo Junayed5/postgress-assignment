@@ -85,13 +85,20 @@ UPDATE species SET status = 'Historic' WHERE discovery_date < '1800-01-01';
 
 -- problem 8
 
-SELECT sighting_id, sighting_time::time FROM sightings;
--- SELECT (
---     CASE 
---         WHEN convert(sighting_time) >= '06:00:00' AND convert(sighting_time) < '12:00:00' THEN 'Morning'
---         WHEN convert(sighting_time) >= '12:00:00' AND convert(sighting_time) < '18:00:00' THEN 'Afternoon'
---         WHEN convert(sighting_time) >= '18:00:00' AND convert(sighting_time) < '24:00:00' THEN 'Evening'
---         WHEN convert(sighting_time) >= '00:00:00' AND convert(sighting_time) < '06:00:00' THEN 'Night'
---         ELSE 'Unknown'
---     END
--- ) FROM sightings;
+SELECT sighting_id, (
+    CASE 
+        WHEN extract(HOUR FROM sighting_time) BETWEEN 5 AND 11 THEN 'Morning'
+        WHEN extract(HOUR FROM sighting_time) BETWEEN 12 AND 17 THEN 'Afternoon'
+        WHEN extract(HOUR FROM sighting_time) BETWEEN 18 AND 24 THEN 'Evening'
+        ELSE 'Night'
+    END
+) AS time_of_day FROM sightings;
+
+
+-- Problem 9
+
+SELECT * FROM rangers LEFT JOIN sightings ON rangers.ranger_id = sightings.ranger_id;
+SELECT name, sightings.ranger_id FROM rangers LEFT JOIN sightings ON rangers.ranger_id = sightings.ranger_id;
+
+
+DELETE FROM (SELECT name, sightings.ranger_id FROM rangers LEFT JOIN sightings ON rangers.ranger_id = sightings.ranger_id) WHERE 
