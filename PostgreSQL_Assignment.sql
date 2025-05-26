@@ -14,15 +14,15 @@ CREATE TABLE species(
     species_id SERIAL PRIMARY KEY,
     common_name VARCHAR(200),
     scientific_name TEXT,
-    discovery_date TIMESTAMP WITHOUT TIME ZONE  NOT NULL,
+    discovery_date DATE  NOT NULL,
     conservation_status VARCHAR(100)
 );
 
 
 CREATE TABLE sightings(
     sighting_id SERIAL PRIMARY KEY,
-    ranger_id INT REFERENCES rangers(ranger_id),
     species_id INT REFERENCES species(species_id),
+    ranger_id INT REFERENCES rangers(ranger_id),
     "location" TEXT,
     sighting_time TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     notes TEXT
@@ -57,7 +57,7 @@ INSERT INTO sightings(species_id, ranger_id, "location", sighting_time, notes) V
 -- Problem 1
 
 INSERT INTO rangers("name", region) VALUES('Derek Fox', 'Coastal Plains');
-
+SELECT * FROM rangers;
 -- Problem 2
 
 SELECT count(*) AS unique_species_count FROM (SELECT common_name FROM species NATURAL JOIN sightings GROUP BY common_name);
@@ -83,6 +83,7 @@ SELECT common_name, MAX(sighting_time), "name" FROM species NATURAL JOIN sightin
 ALTER TABLE species ADD COLUMN status VARCHAR(50);
 UPDATE species SET status = 'Historic' WHERE discovery_date < '1800-01-01';
 
+SELECT * FROM species;
 -- problem 8
 
 SELECT sighting_id, (
@@ -97,8 +98,12 @@ SELECT sighting_id, (
 
 -- Problem 9
 
-SELECT * FROM rangers LEFT JOIN sightings ON rangers.ranger_id = sightings.ranger_id;
-SELECT name, sightings.ranger_id FROM rangers LEFT JOIN sightings ON rangers.ranger_id = sightings.ranger_id;
+DELETE FROM rangers
+WHERE ranger_id NOT IN (SELECT ranger_id FROM sightings WHERE ranger_id IS NOT NULL);
 
+SELECT * FROM rangers;
+SELECT * FROM sightings;
+SELECT * FROM species;
 
-DELETE FROM (SELECT name, sightings.ranger_id FROM rangers LEFT JOIN sightings ON rangers.ranger_id = sightings.ranger_id) WHERE 
+DROP DATABASE conservation_db;
+-- Cleanup
